@@ -1,31 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Money Management</title>
 
-        <!-- CDN for Vue.js -->
-        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
 
-        <!-- CDN for Bulma -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
-    </head>
-    <body>
-        <div id="app">
-            <section class="hero is-primary">
-                <div class="hero-body">
-                    <h1>Money Management</h1>
-                    <button class="button is-dark" @click="addNum">Click Me</button>
-                    <div class="is-flex">
-                        <div v-for="num in nums" class="mr-3">
-                            ${{ num }}
-                        </div>
+    <!-- CDN for Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <!-- CDN for Bulma -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+</head>
+
+<body>
+    <div id="app">
+        <section class="hero is-primary">
+            <div class="hero-title">
+                <h1 class="has text-ali title is-4 pt-4 pb-0 has-text-centered-desktop">{{title}}</h1>
+            </div>
+            <div class="hero-body pt-0 pb-2">
+                <h1 class="is-size-5 pt-0">{{netWorth}}</h1>
+                <h1  class="is-size-5 pt-0">{{Expense}}</h1>
+            </div>
+                <!-- <button class="button is-dark" >Create Expense</button> -->
+                <!-- <div class="is-flex">
+                    <div v-for="num in nums" class="mr-3">
+                        ${{ num }}
                     </div>
-                </div>
-            </section>
+                </div> -->
+            
+        </section>
+        <section class="container">
+            <h2 class="title is-5 pt-4"  >Enter transactions below</h2>
+        <Transactions @transaction-submitted="addTransaction" ></Transactions>
+        <h2 class="title is-6 pt-2">Transactions Summary</h2>
+        <!-- <div>
+        <ul class="card-footer">
+            <li v-for="item in finalTransaction" class="card-footer-item">
+                <span></span>
+                Transaction-item : {{item.name}}</li>
+            <span  class="card-footer-item">Transaction-Description : {{item.description}}</li>
+            <li class="card-footer-item">Transaction-type : {{item.type}}</span></li>
+            <li  class="card-footer-item">Amount : {{item.amount}}</li>
+        </ul>
+    </div> -->
+        <div class="columns">
+            <div class="column">
+                <div class="card">
+                    <footer  class="card-footer" > 
+                        <span class="card-footer-item">Transactions</span>
+                        <span class="card-footer-item">Description</span>
+                        <span class="card-footer-item">Credit/Debit</span>
+                        <span class="card-footer-item">Amount</span>
+                    </footer>
+                    <footer class="card-footer" v-for="item in finalTransaction" >
+                      <span class="card-footer-item" > {{item.name}}</span>
+                      <span class="card-footer-item">{{item.description}}</span>
+                      <span class="card-footer-item">{{item.type}}</span>
+                      <span class="card-footer-item"> {{item.amount}}</span>
+                    </footer>
+                  </div>
+            </div>
         </div>
+        </section>
+    </div>
 
-        <script src="./main.js"></script>
-    </body>
+    <script src="./main.js"></script>
+</body>
+
 </html>
