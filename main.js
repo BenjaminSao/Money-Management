@@ -1,32 +1,23 @@
 Vue.component('Transactions', {
-    template: `
-    
-    <form action="" @submit.prevent="onSubmit" class ="field has-addons">
-     <input type="text" class="input is-primary" v-model= "name" placeholder = " Enter Name of transaction">
-     <input type="text" class="input is-primary" id="description" v-model= "description"placeholder = " Enter Details">
-     <div class ="select is-normal is-primary">
-    <select  v-model= "type" >
-        <option selected >Credit</option>
-        <option>Debit</option>
-    </select>
-    </div>
-     <input type="number" class="input is-primary" v-model.number="amount" placeholder = " Enter Amount">
-     
-    <input type="submit" class="button is-primary" value="Add">  
-     
-</form>
-    `,
+    template: `#transactions-template`,
+    // props: {
+    //      index: {
+        
+    //     required:true
+    // }
+    // },
     data() {
         return {
             name: null,
             description: null,
             type: null,
-            amount: null,
-
-
+            amount: null, 
         }
     },
     methods: {
+        // passIndex(index){
+        //     console.log(index)
+        // },
         onSubmit() {
             let transactionList = {
                 name: this.name,
@@ -34,8 +25,9 @@ Vue.component('Transactions', {
                 type: this.type,
                 amount: this.amount
             }
-            console.log(transactionList.name)
             this.$emit('transaction-submitted', transactionList)
+            this.$emit('update-income')
+            this.$emit('update-expense')
             this.name = null
             this.description = null
             this.type = null
@@ -56,14 +48,48 @@ var app = new Vue
             title: "Expense Tracker",
             netWorth: "Income",
             Expense: "Expense",
+            expenseTotal:0,
+            incomeTotal:0,
             finalTransaction: []
         },
         methods: {
+            
             addTransaction(transactionList) {
 
                 this.finalTransaction.push(transactionList)
-                console.log(this.finalTransaction)
-            }
+            },
+
+            calculateIncome() {
+                
+                let temp = 0;
+                    console.log("called for value update")
+                    for (let item in this.finalTransaction) {
+                        if((this.finalTransaction[item].type)==='Credit')
+                        temp += this.finalTransaction[item].amount
+                    }
+                    this.incomeTotal = temp    
+            },
+            calculateExpense() {
+                
+                let temp = 0;
+                    console.log("called for value update")
+                    for (let item in this.finalTransaction) {
+                        if((this.finalTransaction[item].type)==='Debit')
+                        temp += this.finalTransaction[item].amount
+                    }
+                    this.expenseTotal = temp
+                    
+                
+            },
+            deleteTransaction(index)
+            {
+                this.finalTransaction.splice(index, 1)
+                console.log(this.expenseTotal,this.incomeTotal)
+            },
+            // editTransaction(finalTransaction,index)
+            // {
+            //     console.log(finalTransaction[index])
+            // }
         }
 
 
