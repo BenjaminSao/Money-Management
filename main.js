@@ -15,9 +15,7 @@ Vue.component('Transactions', {
         }
     },
     methods: {
-        // passIndex(index){
-        //     console.log(index)
-        // },
+        
         onSubmit() {
             let transactionList = {
                 name: this.name,
@@ -86,10 +84,7 @@ var app = new Vue
                 this.finalTransaction.splice(index, 1)
                 console.log(this.expenseTotal,this.incomeTotal)
             },
-            // editTransaction(finalTransaction,index)
-            // {
-            //     console.log(finalTransaction[index])
-            // }
+            
         }
 
 
