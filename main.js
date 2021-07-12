@@ -1,13 +1,13 @@
 Vue.component('Transactions', {
     template: `#transactions-template`,
-    // props: {
-    //      index: {
-        
-    //     required:true
-    // }
-    // },
+    props:
+    {
+        finalTransaction: Array,
+        editTransactionId: Number
+    },
     data() {
         return {
+            id: null,
             name: null,
             description: null,
             type: null,
@@ -17,7 +17,23 @@ Vue.component('Transactions', {
     methods: {
         
         onSubmit() {
+
+            if (this.editTransactionId)
+            {
+                transaction = this.finalTransaction.find(t => t.id === this.editTransactionId);
+
+                transaction.name = this.name;
+                transaction.description = this.description;
+                transaction.type = this.type;
+                transaction.amount = this.amount;
+
+                this.$emit("transaction-edited");
+                
+                return;
+            }
+
             let transactionList = {
+                id: Date.now(),
                 name: this.name,
                 description: this.description,
                 type: this.type,
@@ -30,6 +46,7 @@ Vue.component('Transactions', {
             this.description = null
             this.type = null
             this.amount = null
+            console.log(this.finalTransaction);
         },
 
     }
@@ -48,7 +65,8 @@ var app = new Vue
             Expense: "Expense",
             expenseTotal:0,
             incomeTotal:0,
-            finalTransaction: []
+            finalTransaction: [],
+            editTransactionId: null
         },
         methods: {
             
@@ -84,6 +102,16 @@ var app = new Vue
                 this.finalTransaction.splice(index, 1)
                 console.log(this.expenseTotal,this.incomeTotal)
             },
+            editTransaction(item)
+            {
+                this.editTransactionId = item.id;
+
+                console.log("editing:", item.name);
+            },
+            transactionEdited()
+            {
+                this.editTransactionId = null;
+            }
             
         }
 

@@ -35,7 +35,10 @@
             <h2 class="title is-5 pt-4"  >Enter transactions below</h2>
         <Transactions @transaction-submitted="addTransaction" 
         @update-income ="calculateIncome" 
-        @update-expense="calculateExpense" :passIndex="passIndex(index)" :editTransaction= "editTransaction(finalTransaction)" 
+        @update-expense="calculateExpense"
+        @transaction-edited="transactionEdited"
+        :final-transaction="finalTransaction"
+        :edit-transaction-id="editTransactionId"
        ></Transactions>
         
         <h2 class="title is-6 pt-2">Transactions Summary</h2>
@@ -51,7 +54,7 @@
                         <p class="card-footer-item is-small">Delete</p>
                         <p class="card-footer-item is-small">Edit</p>
                     </footer>
-                    <footer class="card-footer " v-for="(item,index) in finalTransaction">
+                    <footer class="card-footer " v-for="(item, index) in finalTransaction">
                       <p class="card-footer-item" > {{item.name}}</p>
                       <p class="card-footer-item">{{item.description}}</p>
                       <p class="card-footer-item">{{item.type}}</p>
@@ -59,7 +62,7 @@
                       <p class="card-footer-item"  @click="deleteTransaction(index);
                       calculateExpense();calculateIncome();"
                       ><span><button class="delete" ></span></button><p> 
-                        <p class="card-footer-item is-small"  @click="editTransaction(item)" > Edit</p>                      
+                        <p class="card-footer-item is-small"  @click="editTransaction(item)"> Edit</p>                      
                     </footer>
                   </div>
             </div>
