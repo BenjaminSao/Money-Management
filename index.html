@@ -15,81 +15,77 @@
 
 <body>
     <div id="app">
-        <section class="hero is-primary">
+        <section class="hero is-primary trial">
             <div class="hero-title">
-                <h1 class="has text-ali title is-4 pt-4 pb-0 has-text-centered-desktop">{{title}}</h1>
+                <h1 class=" title is-4 pt-4 pb-0 has-text-centered-desktop">{{title}}</h1>
             </div>
-            <div class="hero-body pt-0 pb-2">
-                <h1 class="is-size-5 pt-0" >Net {{netWorth}} :  {{incomeTotal}}</h1>
-                <h1  class="is-size-5 pt-0">Net {{Expense}} : {{expenseTotal}}</h1>
+            <div class="hero-body pt-0 pb-2 is-flex is-justify-content-space-between is-align-items-center">
+                <div >
+                   <h1 class="is-size-5 pt-0">Net {{netWorth}} : {{incomeTotal}} {{currency}}</h1>
+                    <h1 class="is-size-5 pt-0">Net {{Expense}} : {{expenseTotal}} {{currency}} </h1>
+                    <h1 class="is-size-5 pt-0">Net in hand : {{netInHand}} {{currency}}</h1>
+                </div>
+                <div class="is-flex is-justify-content-flex-end ">
+                    <h1 class="is-size-6 pt-1 pr-1">Currency</h1>
+                    <form action="" >
+                        <select class="select is-rounded" v-model= "currencyType" @change="changeCurrency">
+                            <option selected>CAD</option>
+                            <option>INR</option>
+                            <option>THB</option>
+                        </select>
+                    </form>
+                </div>
             </div>
-                <!-- <button class="button is-dark" >Create Expense</button> -->
-                <!-- <div class="is-flex">
-                    <div v-for="num in nums" class="mr-3">
-                        ${{ num }}
-                    </div>
-                </div> -->
-            
         </section>
         <section class="container">
-            <h2 class="title is-5 pt-4"  >Enter transactions below</h2>
-        <Transactions @transaction-submitted="addTransaction" 
-        @update-income ="calculateIncome" 
-        @update-expense="calculateExpense"
-        @transaction-edited="transactionEdited"
-        :final-transaction="finalTransaction"
-        :edit-transaction-id="editTransactionId"
-       ></Transactions>
-        
-        <h2 class="title is-6 pt-2">Transactions Summary</h2>
-        
-        <div class="columns">
-            <div class="column">
-                <div class="card ">
-                    <footer  class="card-footer" > 
-                        <p class="card-footer-item">Transactions</p>
-                        <p class="card-footer-item">Description</p>
-                        <p class="card-footer-item">Credit/Debit</p>
-                        <p class="card-footer-item">Amount</p>
-                        <p class="card-footer-item is-small">Delete</p>
-                        <p class="card-footer-item is-small">Edit</p>
-                    </footer>
-                    <footer class="card-footer " v-for="(item, index) in finalTransaction">
-                      <p class="card-footer-item" > {{item.name}}</p>
-                      <p class="card-footer-item">{{item.description}}</p>
-                      <p class="card-footer-item">{{item.type}}</p>
-                      <p class="card-footer-item"> {{item.amount}}</p>
-                      <p class="card-footer-item"  @click="deleteTransaction(index);
-                      calculateExpense();calculateIncome();"
-                      ><span><button class="delete" ></span></button><p> 
-                        <p class="card-footer-item is-small"  @click="editTransaction(item)"> Edit</p>                      
-                    </footer>
-                  </div>
+            <h2 class="title is-5 pt-4">Enter transactions below</h2>
+            <Transactions @transaction-submitted="addTransaction" @update-income="calculateIncome"
+                @update-expense="calculateExpense" @transaction-edited="clearPreviousId" @update-currency ="changeCurrency"
+                :final-transaction="finalTransaction" :edit-transaction-id="editTransactionId"  
+                ></Transactions>
+            <h2 class="title is-6 pt-2">Transactions Summary</h2>
+            <div class="columns">
+                <div class="column">
+                    <div class="card ">
+                        <footer class="card-footer">
+                            <p class="card-footer-item">Transactions</p>
+                            <p class="card-footer-item">Description</p>
+                            <p class="card-footer-item">Credit/Debit</p>
+                            <p class="card-footer-item">Amount $</p>
+                            <p class="card-footer-item is-small">Delete</p>
+                            <p class="card-footer-item is-small">Edit</p>
+                        </footer>
+                        <footer class="card-footer " v-for="(item, index) in finalTransaction">
+                            <p class="card-footer-item"> {{item.name}}</p>
+                            <p class="card-footer-item">{{item.description}}</p>
+                            <p class="card-footer-item">{{item.type}}</p>
+                            <p class="card-footer-item"> {{item.amount}} $</p>
+                            <p class="card-footer-item" @click="deleteTransaction(index);
+                      calculateExpense();calculateIncome();changeCurrency();"><span><button class="delete"></span></button>
+                            <p>
+                            <p class="card-footer-item is-small" @click="editTransaction(item)"> <img src="./Images/edit-3.svg" alt=""></p>
+                        </footer>
+                    </div>
+                </div>
             </div>
-        </div>
         </section>
-        
     </div>
     <script type="text/x-template" id="transactions-template">
         <div>
-        <form action="" @submit.prevent="onSubmit" class ="field has-addons">
-            <input type="text" class="input is-primary" v-model= "name" placeholder = " Enter Name of transaction" >
-            <input type="text" class="input is-primary" id="description" v-model= "description"placeholder = " Enter Details" >
+        <form action="" @submit.prevent="onSubmit"  class ="field has-addons">
+            <input type="text" class="input is-primary" v-model= "name" placeholder = " Enter Name of transaction"  required>
+            <input type="text" class="input is-primary" id="description" v-model= "description"placeholder = " Enter Details" required >
             <div class ="select is-normal is-primary" >
-           <select  v-model= "type" >
+           <select  v-model= "type" required>
                <option selected >Credit</option>
                <option>Debit</option>
            </select>
            </div>
-            <input type="number" class="input is-primary" v-model.number="amount" placeholder = " Enter Amount" >
-            
-           <input type="submit" class="button is-primary" value="Add">  
-           
+            <input type="number" class="input is-primary" v-model.number="amount" placeholder = " Enter Amount" required >          
+           <input type="submit" class="button is-primary" value="Add">    
        </form> 
-       
     </div>
     </script>
     <script src="./main.js"></script>
 </body>
-
 </html>
