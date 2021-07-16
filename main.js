@@ -137,9 +137,15 @@ var app = new Vue
                 }
                     
             },
-            deleteTransaction(index)
+            deleteTransaction(id)
             {
-                this.finalTransaction.splice(index, 1);
+                for (let i = 0; i < this.finalTransaction.length; i++)
+                {
+                    if (this.finalTransaction[i].id === id) {
+                        this.finalTransaction.splice(i, 1);   
+                    }
+                    }
+                this.editTransactionId = null;
             },
             editTransaction(transaction)
             {

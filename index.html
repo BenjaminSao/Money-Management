@@ -60,10 +60,10 @@
                             <p class="card-footer-item">{{transaction.description}}</p>
                             <p class="card-footer-item">{{transaction.type}}</p>
                             <p class="card-footer-item">$ {{transaction.amount}}</p>
-                            <p class="card-footer-item" @click="deleteTransaction(index);
+                            <p class="card-footer-item" @click="deleteTransaction(transaction.id);
                       calculateExpense();calculateIncome();changeCurrency();"><span><button class="delete"></span></button>
                             <p>
-                            <p class="card-footer-item is-small" @click="editTransaction(transaction)"> <img src="./images/edit-3.svg" alt=""></p>
+                            <p class="card-footer-item is-small" @click="editTransaction(transaction)"> <img class="is-clickable" src="./images/edit-3.svg" alt=""></p>
                         </footer>
                     </div>
                 </div>
