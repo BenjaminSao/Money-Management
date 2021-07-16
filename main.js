@@ -1,7 +1,7 @@
 
 
 
-Vue.component('Transactions', {
+Vue.component('transaction', {
     template: `#transactions-template`,
     props:
     {
@@ -28,20 +28,15 @@ Vue.component('Transactions', {
                 this.description = transaction.description;
                 this.type = transaction.type;
                 this.amount = transaction.amount;
-                return;
             }
         }
     },
     methods: {
-
-        editTransactionDisplay (){
-            this.$emit('console.log');
-        } ,     
+    
         onSubmit() {
 
             if (this.editTransactionId) {
                 transaction = this.finalTransaction.find(t => t.id === this.editTransactionId);
-                console.log(transaction.id, transaction.name);
                 transaction.name = this.name;
                 transaction.description = this.description;
                 transaction.type = this.type;
@@ -49,21 +44,21 @@ Vue.component('Transactions', {
                 this.$emit("transaction-edited");
                 this.$emit('update-income');
                 this.$emit('update-expense');
-                this.$emit('update-currency');
+                this.$emit("update-currency");
                 this.name = null;
                 this.description = null;
                 this.type = null;
                 this.amount = null;
             }
             else {
-                let transactionList = {
+                let transaction = {
                     id: Date.now(),
                     name: this.name,
                     description: this.description,
                     type: this.type,
                     amount: this.amount
                 }
-                this.$emit('transaction-submitted', transactionList);
+                this.$emit('transaction-submitted', transaction);
                 this.$emit('update-income');
                 this.$emit('update-expense');
                 this.$emit('update-currency');
@@ -71,7 +66,6 @@ Vue.component('Transactions', {
                 this.description = null;
                 this.type = null;
                 this.amount = null;
-                console.log(this.finalTransaction);
             }
         },
         
@@ -88,13 +82,10 @@ var app = new Vue
         el: "#app",
         data: {
             title: "Expense Tracker",
-            netWorth: "Income",
-            Expense: "Expense",
             expenseTotal:0,
             incomeTotal: 0,
             tempExpenseTotal: 0,
-            tempIncomeTotal:0,
-                
+            tempIncomeTotal:0,        
             finalTransaction: [],
             editTransactionId: null,
             currencyType: 'CAD',
@@ -102,15 +93,14 @@ var app = new Vue
         },
         methods: {
             
-            addTransaction(transactionList) {
+            addTransaction(transaction) {
 
-                this.finalTransaction.push(transactionList);
+                this.finalTransaction.push(transaction);
             },
 
             calculateIncome() {
                 
                 let temp = 0;
-                console.log("called for value update");
                     for (let item in this.finalTransaction) {
                         if ((this.finalTransaction[item].type) === 'Credit')
                             temp += this.finalTransaction[item].amount;
@@ -122,7 +112,6 @@ var app = new Vue
             calculateExpense() {
                 
                 let temp = 0;
-                    console.log("called for value update")
                     for (let item in this.finalTransaction) {
                         if ((this.finalTransaction[item].type) === 'Debit')
                             temp += this.finalTransaction[item].amount;
@@ -152,22 +141,15 @@ var app = new Vue
             {
                 this.finalTransaction.splice(index, 1);
             },
-            editTransaction(item)
+            editTransaction(transaction)
             {
-                this.editTransactionId = item.id;
-                console.log(this.editTransactionId);
-
-                console.log("editing:", item.name);
+                this.editTransactionId = transaction.id;
             },
             
-            clearPreviousId()
+            UpdateID()
             {
                 this.editTransactionId = null;
             },
-            editTransactionDisplay()
-            {
-                console.log("to display edit");
-            }
         },
         computed :{
             netInHand() {
