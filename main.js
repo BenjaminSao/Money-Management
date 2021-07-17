@@ -6,8 +6,7 @@ Vue.component('transaction', {
     props:
     {
         finalTransaction: Array,
-        editTransactionId: Number,
-        
+        editTransactionId: Number,  
     },
     data() {
         return {
@@ -115,17 +114,18 @@ var app = new Vue
 
             calculateIncome() {
                 let temp = 0;
-                for (let item in this.finalTransaction) {
-                    if ((this.finalTransaction[item].type) === 'Credit')
-                    {
-                        if (this.finalTransaction[item].money === "CAD")
-                            temp = temp + this.finalTransaction[item].amount;
-                        if (this.finalTransaction[item].money === "INR")
-                            temp = temp + (this.finalTransaction[item].amount) / 50;
-                        if (this.finalTransaction[item].money === "THB")
-                            temp += (this.finalTransaction[item].amount) / 25;
+                if(this.finalTransaction){
+                    for (let item in this.finalTransaction) {
+                        if ((this.finalTransaction[item].type) === 'Credit')
+                        {
+                            if (this.finalTransaction[item].money === "CAD")
+                                temp = temp + this.finalTransaction[item].amount;
+                            if (this.finalTransaction[item].money === "INR")
+                                temp = temp + (this.finalTransaction[item].amount) / 50;
+                            if (this.finalTransaction[item].money === "THB")
+                                temp += (this.finalTransaction[item].amount) / 25;
+                        }
                     }
-                
                     this.tempIncomeTotal = temp;
                 }
             },
