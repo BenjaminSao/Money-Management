@@ -15,6 +15,7 @@ Vue.component('transaction', {
             name: null,
             description: null,
             type: null,
+            money:null,
             amount: null,
         }
     },
@@ -27,7 +28,8 @@ Vue.component('transaction', {
                 this.name = transaction.name;
                 this.description = transaction.description;
                 this.type = transaction.type;
-                this.amount = transaction.amount;
+                this.money = transaction.money;
+                this.amount = transaction.amount;    
             }
         }
     },
@@ -40,6 +42,7 @@ Vue.component('transaction', {
                 transaction.name = this.name;
                 transaction.description = this.description;
                 transaction.type = this.type;
+                transaction.money = this.money;
                 transaction.amount = this.amount;
                 this.$emit("transaction-edited");
                 this.$emit('update-income');
@@ -48,15 +51,17 @@ Vue.component('transaction', {
                 this.name = null;
                 this.description = null;
                 this.type = null;
+                this.money=null,
                 this.amount = null;
             }
             else {
                 let transaction = {
                     id: Date.now(),
-                    name: this.name,
+                    name:this.name,
                     description: this.description,
-                    type: this.type,
-                    amount: this.amount
+                    type:this.type,
+                    money: this.money,
+                    amount:this.amount
                 }
                 this.$emit('transaction-submitted', transaction);
                 this.$emit('update-income');
@@ -65,11 +70,21 @@ Vue.component('transaction', {
                 this.name = null;
                 this.description = null;
                 this.type = null;
+                this.money = null;
                 this.amount = null;
             }
-        },
-        
+        },   
     },
+    computed:
+    {
+        submission() {
+            if (this.editTransactionId)
+                return "Update"
+            else
+                return "  Add  "
+        }
+    }
+    
 })
 
 
@@ -99,22 +114,34 @@ var app = new Vue
             },
 
             calculateIncome() {
-                
                 let temp = 0;
-                    for (let item in this.finalTransaction) {
-                        if ((this.finalTransaction[item].type) === 'Credit')
-                            temp += this.finalTransaction[item].amount;
+                for (let item in this.finalTransaction) {
+                    if ((this.finalTransaction[item].type) === 'Credit')
+                    {
+                        if (this.finalTransaction[item].money === "CAD")
+                            temp = temp + this.finalTransaction[item].amount;
+                        if (this.finalTransaction[item].money === "INR")
+                            temp = temp + (this.finalTransaction[item].amount) / 50;
+                        if (this.finalTransaction[item].money === "THB")
+                            temp += (this.finalTransaction[item].amount) / 25;
                     }
                 
-                this.tempIncomeTotal = temp;
-
+                    this.tempIncomeTotal = temp;
+                }
             },
             calculateExpense() {
                 
                 let temp = 0;
                     for (let item in this.finalTransaction) {
                         if ((this.finalTransaction[item].type) === 'Debit')
-                            temp += this.finalTransaction[item].amount;
+                        {
+                            if (this.finalTransaction[item].money === "CAD")
+                                temp = temp + this.finalTransaction[item].amount;
+                            if (this.finalTransaction[item].money === "INR")
+                                temp = temp + (this.finalTransaction[item].amount)/50;
+                            if (this.finalTransaction[item].money === "THB")
+                                temp += (this.finalTransaction[item].amount)/25;
+                        }    
                     }
                 this.tempExpenseTotal = temp;
             },
@@ -139,12 +166,13 @@ var app = new Vue
             },
             deleteTransaction(id)
             {
-                for (let i = 0; i < this.finalTransaction.length; i++)
-                {
-                    if (this.finalTransaction[i].id === id) {
-                        this.finalTransaction.splice(i, 1);   
+                if (confirm("Press ok to confirm delete")) {
+                    for (let i = 0; i < this.finalTransaction.length; i++) {
+                        if (this.finalTransaction[i].id === id) {
+                            this.finalTransaction.splice(i, 1);
+                        }
                     }
-                    }
+                }
                 this.editTransactionId = null;
             },
             editTransaction(transaction)
@@ -155,7 +183,7 @@ var app = new Vue
             UpdateID()
             {
                 this.editTransactionId = null;
-            },
+            },    
         },
         computed :{
             netInHand() {
@@ -167,9 +195,10 @@ var app = new Vue
                 if (this.currencyType === 'INR')
                     return "₹"
                 if (this.currencyType === 'THB')
-                    return "฿"
+                    return "฿" 
+            },
+            
                 
-            }
         },
            
         
