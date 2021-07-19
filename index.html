@@ -41,7 +41,7 @@
             <h2 class="title is-6 pt-4">Enter transactions below</h2>
             <transaction @transaction-submitted="addTransaction" @update-income="calculateIncome"
                 @update-expense="calculateExpense" @transaction-edited="UpdateID" @update-currency="changeCurrency"
-                :final-transaction="finalTransaction" :edit-transaction-id="editTransactionId">
+                :final-transaction="transactions" :edit-transaction-id="editTransactionId">
             </transaction>
             <h2 class="title is-6 pt-4">Transactions Summary</h2>
             <div class="columns">
@@ -56,14 +56,13 @@
                             <p class="card-footer-item is-flex-grow-1">Delete</p>
                             <p class="card-footer-item is-flex-grow-1">Edit</p>
                         </footer>
-                        <footer class="card-footer " v-for="(transaction, index) in finalTransaction">
+                        <footer class="card-footer " v-for="(transaction, index) in transactions">
                             <p class="card-footer-item is-flex-grow-3"> {{transaction.name}}</p>
                             <p class="card-footer-item is-flex-grow-5">{{transaction.description}}</p>
                             <p class="card-footer-item is-flex-grow-2">{{transaction.type}}</p>
                             <p class="card-footer-item is-flex-grow-1">{{transaction.money}}</p>
                             <p class="card-footer-item is-flex-grow-2">{{transaction.amount}}</p>
-                            <p class="card-footer-item is-flex-grow-1" @click="deleteTransaction(transaction.id);calculateIncome();
-                      calculateExpense();changeCurrency();"><button class="delete"></button>
+                            <p class="card-footer-item is-flex-grow-1" @click="deleteTransaction(transaction.id);"><button class="delete"></button>
                             <p>
                             <p class="card-footer-item is-flex-grow-1" @click="editTransaction(transaction)"> <img
                                     class="is-clickable" src="./images/edit-3.svg" alt=""></p>

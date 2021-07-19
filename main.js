@@ -5,7 +5,7 @@ Vue.component('transaction', {
     template: `#transactions-template`,
     props:
     {
-        finalTransaction: Array,
+        transactions: Array,
         editTransactionId: Number,  
     },
     data() {
@@ -23,7 +23,7 @@ Vue.component('transaction', {
         {
             if (_editTransactionId)
             {
-                const transaction = this.finalTransaction.find(t => t.id === _editTransactionId);
+                const transaction = this.transactions.find(t => t.id === _editTransactionId);
                 this.name = transaction.name;
                 this.description = transaction.description;
                 this.type = transaction.type;
@@ -37,7 +37,7 @@ Vue.component('transaction', {
         onSubmit() {
 
             if (this.editTransactionId) {
-                transaction = this.finalTransaction.find(t => t.id === this.editTransactionId);
+                transaction = this.transactions.find(t => t.id === this.editTransactionId);
                 transaction.name = this.name;
                 transaction.description = this.description;
                 transaction.type = this.type;
@@ -100,7 +100,7 @@ var app = new Vue
             incomeTotal: 0,
             tempExpenseTotal: 0,
             tempIncomeTotal:0,        
-            finalTransaction: [],
+            transactions: [],
             editTransactionId: null,
             currencyType: 'CAD',
             
@@ -109,21 +109,21 @@ var app = new Vue
             
             addTransaction(transaction) {
 
-                this.finalTransaction.push(transaction);
+                this.transactions.push(transaction);
             },
 
             calculateIncome() {
                 let temp = 0;
-                if(this.finalTransaction){
-                    for (let item in this.finalTransaction) {
-                        if ((this.finalTransaction[item].type) === 'Credit')
+                if(this.transactions){
+                    for (let item in this.transactions) {
+                        if ((this.transactions[item].type) === 'Credit')
                         {
-                            if (this.finalTransaction[item].money === "CAD")
-                                temp = temp + this.finalTransaction[item].amount;
-                            if (this.finalTransaction[item].money === "INR")
-                                temp = temp + (this.finalTransaction[item].amount) / 50;
-                            if (this.finalTransaction[item].money === "THB")
-                                temp += (this.finalTransaction[item].amount) / 25;
+                            if (this.transactions[item].money === "CAD")
+                                temp = temp + this.transactions[item].amount;
+                            if (this.transactions[item].money === "INR")
+                                temp = temp + (this.transactions[item].amount) / 50;
+                            if (this.transactions[item].money === "THB")
+                                temp += (this.transactions[item].amount) / 25;
                         }
                     }
                     this.tempIncomeTotal = temp;
@@ -132,15 +132,15 @@ var app = new Vue
             calculateExpense() {
                 
                 let temp = 0;
-                    for (let item in this.finalTransaction) {
-                        if ((this.finalTransaction[item].type) === 'Debit')
+                    for (let item in this.transactions) {
+                        if ((this.transactions[item].type) === 'Debit')
                         {
-                            if (this.finalTransaction[item].money === "CAD")
-                                temp = temp + this.finalTransaction[item].amount;
-                            if (this.finalTransaction[item].money === "INR")
-                                temp = temp + (this.finalTransaction[item].amount)/50;
-                            if (this.finalTransaction[item].money === "THB")
-                                temp += (this.finalTransaction[item].amount)/25;
+                            if (this.transactions[item].money === "CAD")
+                                temp = temp + this.transactions[item].amount;
+                            if (this.transactions[item].money === "INR")
+                                temp = temp + (this.transactions[item].amount)/50;
+                            if (this.transactions[item].money === "THB")
+                                temp += (this.transactions[item].amount)/25;
                         }    
                     }
                 this.tempExpenseTotal = temp;
@@ -167,9 +167,9 @@ var app = new Vue
             deleteTransaction(id)
             {
                 if (confirm("Press ok to confirm delete")) {
-                    for (let i = 0; i < this.finalTransaction.length; i++) {
-                        if (this.finalTransaction[i].id === id) {
-                            this.finalTransaction.splice(i, 1);
+                    for (let i = 0; i < this.transactions.length; i++) {
+                        if (this.transactions[i].id === id) {
+                            this.transactions.splice(i, 1);
                         }
                     }
                 }
@@ -178,6 +178,9 @@ var app = new Vue
             editTransaction(transaction)
             {
                 this.editTransactionId = transaction.id;
+                calculateIncome();      
+                calculateExpense();
+                changeCurrency();
             },
             
             UpdateID()
