@@ -41,7 +41,7 @@
             <h2 class="title is-6 pt-4">Enter transactions below</h2>
             <transaction @transaction-submitted="addTransaction" @update-income="calculateIncome"
                 @update-expense="calculateExpense" @transaction-edited="UpdateID" @update-currency="changeCurrency"
-                :final-transaction="transactions" :edit-transaction-id="editTransactionId">
+                :transactions="transactions" :edit-transaction-id="editTransactionId">
             </transaction>
             <h2 class="title is-6 pt-4">Transactions Summary</h2>
             <div class="columns">
@@ -64,7 +64,7 @@
                             <p class="card-footer-item is-flex-grow-2">{{transaction.amount}}</p>
                             <p class="card-footer-item is-flex-grow-1" @click="deleteTransaction(transaction.id);"><button class="delete"></button>
                             <p>
-                            <p class="card-footer-item is-flex-grow-1" @click="editTransaction(transaction)"> <img
+                            <p class="card-footer-item is-flex-grow-1" @click="editTransaction(transaction);"> <img
                                     class="is-clickable" src="./images/edit-3.svg" alt=""></p>
                         </footer>
                     </div>
@@ -75,7 +75,7 @@
     <script type="text/x-template" id="transactions-template">
         <div>
         <form  @submit.prevent="onSubmit"  class ="is-flex ">
-            <input type="text" class="input is-primary mr-1" v-model= "name" placeholder = "Enter Name of transaction" required >
+            <input type="text" class="input is-primary mr-1" v-model= "name" placeholder = "Enter Name of transaction" required>
             <input type="text" class="input is-primary mr-1" id="description" v-model= "description"placeholder = "Enter Details" required >
             <div class ="select is-normal is-primary mr-1" >
            <select  v-model= "type" required >

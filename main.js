@@ -5,8 +5,9 @@ Vue.component('transaction', {
     template: `#transactions-template`,
     props:
     {
+        
+        editTransactionId: Number,
         transactions: Array,
-        editTransactionId: Number,  
     },
     data() {
         return {
@@ -21,7 +22,10 @@ Vue.component('transaction', {
     watch: {
         editTransactionId: function (_editTransactionId)
         {
+        // console.log(transaction,_editTransactionId)
+        
             if (_editTransactionId)
+            
             {
                 const transaction = this.transactions.find(t => t.id === _editTransactionId);
                 this.name = transaction.name;
@@ -35,7 +39,6 @@ Vue.component('transaction', {
     methods: {
     
         onSubmit() {
-
             if (this.editTransactionId) {
                 transaction = this.transactions.find(t => t.id === this.editTransactionId);
                 transaction.name = this.name;
@@ -114,7 +117,8 @@ var app = new Vue
 
             calculateIncome() {
                 let temp = 0;
-                if(this.transactions){
+                if (this.transactions)
+                {
                     for (let item in this.transactions) {
                         if ((this.transactions[item].type) === 'Credit')
                         {
@@ -174,13 +178,13 @@ var app = new Vue
                     }
                 }
                 this.editTransactionId = null;
+                this.calculateIncome();
+                this.calculateExpense();
+                this.changeCurrency();
             },
             editTransaction(transaction)
             {
                 this.editTransactionId = transaction.id;
-                calculateIncome();      
-                calculateExpense();
-                changeCurrency();
             },
             
             UpdateID()
