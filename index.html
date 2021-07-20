@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Money Management</title>
+        <title>Expense Tracker</title>
 
         <!-- CDN for Vue.js -->
         <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
@@ -11,21 +11,109 @@
         <!-- CDN for Bulma -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
     </head>
+
     <body>
         <div id="app">
             <section class="hero is-primary">
-                <div class="hero-body">
-                    <h1>Money Management</h1>
-                    <button class="button is-dark" @click="addNum">Click Me</button>
-                    <div class="is-flex">
-                        <div v-for="num in nums" class="mr-3">
-                            ${{ num }}
+                <div class="hero-title">
+                    <h1 class="title is-4 pt-4 pb-0 has-text-centered-desktop">{{title}}</h1>
+                </div>
+                <div
+                    class="hero-body pt-0 pb-2 is-flex is-justify-content-space-between is-align-items-center"
+                >
+                    <div>
+                        <h1 class="is-size-5 pt-0">Net Worth : {{currency}} {{incomeTotal}}</h1>
+                        <h1 class="is-size-5 pt-0">Net Expense : {{currency}} {{expenseTotal}}</h1>
+                        <h1 class="is-size-5 pt-0">Net in hand : {{currency}} {{netInHand}}</h1>
+                    </div>
+                    <div class="is-flex is-justify-content-flex-end">
+                        <h1 class="is-size-6 pt-1 pr-1">Currency</h1>
+                        <form>
+                            <select class="select" v-model="currencyType" @change="changeCurrency">
+                                <option selected>CAD</option>
+                                <option>INR</option>
+                                <option>THB</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <section class="container">
+                <h2 class="title is-6 pt-4">Enter transactions below</h2>
+                <transaction
+                    @transaction-submitted="addTransaction"
+                    @transaction-updated="transactionUpdated"
+                    :transactions="transactions"
+                    :edit-transaction-id="editTransactionId"
+                >
+                </transaction>
+                <h2 class="title is-6 pt-4">Transactions Summary</h2>
+                <div class="columns">
+                    <div class="column">
+                        <div class="card">
+                            <footer class="card-footer">
+                                <p class="card-footer-item is-flex-grow-3">Transactions</p>
+                                <p class="card-footer-item is-flex-grow-5">Description</p>
+                                <p class="card-footer-item is-flex-grow-2">Credit/Debit</p>
+                                <p class="card-footer-item is-flex-grow-1">Currency</p>
+                                <p class="card-footer-item is-flex-grow-2">Amount</p>
+                                <p class="card-footer-item is-flex-grow-1">Delete</p>
+                                <p class="card-footer-item is-flex-grow-1">Edit</p>
+                            </footer>
+                            <footer
+                                class="card-footer"
+                                v-for="(transaction, index) in transactions"
+                            >
+                                <p class="card-footer-item is-flex-grow-3">{{transaction.name}}</p>
+                                <p class="card-footer-item is-flex-grow-5">
+                                    {{transaction.description}}
+                                </p>
+                                <p class="card-footer-item is-flex-grow-2">{{transaction.type}}</p>
+                                <p class="card-footer-item is-flex-grow-1">{{transaction.money}}</p>
+                                <p class="card-footer-item is-flex-grow-2">
+                                    {{transaction.amount}}
+                                </p>
+                                <p
+                                    class="card-footer-item is-flex-grow-1"
+                                    @click="deleteTransaction(transaction.id)"
+                                >
+                                    <button class="delete"></button>
+                                </p>
+                                <p
+                                    class="card-footer-item is-flex-grow-1"
+                                    @click="editTransaction(transaction)"
+                                >
+                                    <img class="is-clickable" src="./images/edit-3.svg" alt="" />
+                                </p>
+                            </footer>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
-
+        <script type="text/x-template" id="transaction-form-template">
+                <div>
+                <form @submit.prevent="onSubmit" class="is-flex">
+                    <input type="text" class="input is-primary mr-1" v-model="name" placeholder="Enter Name of transaction" required>
+                    <input type="text" class="input is-primary mr-1" id="description" v-model="description"placeholder="Enter Details" required>
+                    <div class="select is-normal is-primary mr-1">
+                   <select v-model= "type" required>
+                       <option selected>Credit</option>
+                       <option>Debit</option>
+                   </select>
+                   </div>
+                   <div class="select is-normal is-primary mr-1">
+                    <select v-model="money" required>
+                        <option selected>CAD</option>
+                        <option>INR</option>
+                        <option>THB</option>
+                    </select>
+                    </div>
+                    <input type="number" class="input is-primary mr-1" v-model.number="amount" placeholder="Enter Amount" required>
+                   <button type="submit" class="button is-primary" value="Add">{{submission}}</button>
+               </form>
+            </div>
+        </script>
         <script src="./main.js"></script>
     </body>
 </html>
