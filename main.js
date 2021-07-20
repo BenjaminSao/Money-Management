@@ -1,12 +1,11 @@
 Vue.component("transaction",
     {
-    template:`#transaction-form-template`,
+    template: `#transaction-form-template`,
     props:
     {
-        editTransactionId:Number,
-        transactions:Array,
+        editTransactionId: Number,
+        transactions: Array,
     },
-
     data()
     {
         return {
@@ -18,7 +17,6 @@ Vue.component("transaction",
             amount: null,
         }
     },
-
     watch:
     {
         editTransactionId: function(_editTransactionId)
@@ -35,7 +33,6 @@ Vue.component("transaction",
             }
         }
     },
-
     methods:
     {
         onSubmit()
@@ -43,6 +40,7 @@ Vue.component("transaction",
             if (this.editTransactionId) 
             {
                 transaction = this.transactions.find(t => t.id === this.editTransactionId);
+
                 transaction.name = this.name;
                 transaction.description = this.description;
                 transaction.type = this.type;
@@ -57,7 +55,7 @@ Vue.component("transaction",
             }
             else 
             {
-                let transaction = {
+                const transaction = {
                     id: Date.now(),
                     name: this.name,
                     description: this.description,
@@ -66,7 +64,7 @@ Vue.component("transaction",
                     amount: this.amount
                 }
 
-                this.$emit("transaction-submitted",transaction);
+                this.$emit("transaction-submitted", transaction);
                 
                 this.name = null;
                 this.description = null;
@@ -78,7 +76,6 @@ Vue.component("transaction",
             this.$emit("transaction-updated");
         },   
     },
-
     computed:
     {
         submission()
@@ -91,7 +88,7 @@ Vue.component("transaction",
     }
 })
 
-var app=new Vue
+var app = new Vue
     ({
         el: "#app",
         data: 
@@ -105,7 +102,6 @@ var app=new Vue
             editTransactionId: null,
             currencyType: "CAD",
         },
-
         methods:
         {
             addTransaction(transaction)
@@ -132,7 +128,6 @@ var app=new Vue
                     this.tempIncomeTotal=temp;
                 }
             },
-
             calculateExpense()
             {
                 let temp=0;
@@ -151,10 +146,9 @@ var app=new Vue
 
                 this.tempExpenseTotal=temp;
             },
-
             changeCurrency()
             {
-                if(this.currencyType === "CAD")
+                if (this.currencyType === "CAD")
                 {
                     this.expenseTotal = this.tempExpenseTotal;
                     this.incomeTotal = this.tempIncomeTotal;
@@ -170,7 +164,6 @@ var app=new Vue
                     this.incomeTotal = this.tempIncomeTotal * 50;
                 }
             },
-
             deleteTransaction(id)
             {
                 if (confirm("Press ok to confirm")) 
@@ -185,10 +178,9 @@ var app=new Vue
                 }
                 
                 this.editTransactionId = null;
-                
+
                 this.transactionUpdated();    
             },
-
             transactionUpdated()
             {
                 this.calculateIncome();
@@ -197,13 +189,11 @@ var app=new Vue
 
                 this.editTransactionId = null;
             },
-
             editTransaction(transaction)
             {
                 this.editTransactionId = transaction.id;
             }, 
         },
-
         computed:
         {
             netInHand()
